@@ -6,8 +6,8 @@ Version v2.0.0-alpha 2023-01-19 14:33:52 UTC
 - You will recieve an email with a password for you to use to log in.
 - After clicking `Return to Main Menu`, click `Log In`.
 - Enter your email and password (the one from the email), and click `Log In`.
-- From the Main Menu, you can `Change [your] Password` or continue to use the one that
-was automatically set for you.
+- From the Main Menu, you can `Change [your] Password` or continue to use the one that was
+automatically set for you.
 
 # Resetting your password
 If you forget your password, you can reset it.
@@ -19,5 +19,5 @@ If you forget your password, you can reset it.
 # Feature Requests, Bug Reports, Questions, etc.
 - Please request features, report bugs, ask questions, etc in the
 [issues tab](https://github.com/codeBodger/Quiz-2/issues) for this site's
-[GitHub repository](https://github.com/codeBodger/Quiz-2).  You will need to create a
-GitHub account to do this.  
+[GitHub repository](https://github.com/codeBodger/Quiz-2).  You will need to create a GitHub
+account to do this.  
