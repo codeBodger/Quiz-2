@@ -1,0 +1,4 @@
+*.hash
+*_data.json
+.replit
+replit.nix
