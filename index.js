@@ -321,7 +321,7 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: "ackerman.quiz+noreply@gmail.com",
+    user: "ackerman.quiz@gmail.com",
     pass: process.env['app password']
   }
 });
@@ -335,14 +335,10 @@ function randomPassword() {
 function pswdEmail(email, which) {
 	console.log(getFuncName());
 	
-	if (fs.existsSync(`${email}_password.hash`)) {
-		return "exists";
-	}
-
 	var pswd = randomPassword();
 	
 	var mailOptions = {
-		from: 'ackerman.quiz+noreply@gmail.com',
+		from: 'ackerman.quiz@gmail.com',
 		to: email,
 		subject: `Quiz password ${which} email`,
 		text: `Password: ${pswd}`
@@ -357,6 +353,10 @@ function pswdEmail(email, which) {
 	});
 
 	if (which == "set") {
+		if (fs.existsSync(`${email}_password.hash`)) {
+			return "exists";
+		}
+	
 		fs.writeFile(
 			`${email}_password.hash`,
 			sha256(pswd),
@@ -376,6 +376,10 @@ function pswdEmail(email, which) {
 		);
 	}
 	else {
+		if (!fs.existsSync(`${email}_password.hash`)) {
+			return "doesn't exist";
+		}
+
 		fs.writeFile(
 			`${email}_reset_password.hash`,
 			sha256(pswd) +

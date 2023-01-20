@@ -1,5 +1,5 @@
 <html>
-<head data-version="Version v2.0.0-alpha 2023-01-19 17:22:53 UTC"> <!-- set by pre-commit -->
+<head data-version="Version v2.0.0-alpha 2023-01-20 13:19:38 UTC"> <!-- set by pre-commit -->
 	<title>Quiz</title>
 
 	<style>
@@ -206,7 +206,7 @@
 			}
 		}
 
-		function save() {console.log("save");
+		function save() {
 			localStorage.setItem("drops-data", "[ " + getVar("savedGroups") + " ]");
 			serverSave();
 		}
@@ -1193,7 +1193,10 @@
 			save();
 		}
 		
-		function FinishStudy() { location.reload(); }
+		function FinishStudy() {
+			save();
+			location.reload();
+		}
 	</script>
 	
 	<!-- Creating a group -->
@@ -1289,6 +1292,7 @@
 			setVar("sets", "");
 			setVar("savedGroups", getVar("groups"));
 			
+			save();
 			location.reload();
 		}
 	</script>
@@ -1489,6 +1493,7 @@
 		function FinishImport() {
 			setVar("savedGroups", getVar("groups"));
 			
+			save();
 			location.reload();
 		}
 	</script>
@@ -1645,7 +1650,8 @@
 				case "success":
 					document.getElementById("signup").innerHTML = (
 						`<h3>Password ${which} email sent to ${email}!</h3>` +
-						`<h5>Be sure to check your junk/spam if you don't see the email.</h5>`
+						`<h5>Be sure to check your junk/spam if you don't see the email.</h5>` +
+						`<button onclick="location.reload()>Return to Main Menu</button>"`
 					);
 				break;
 
@@ -1696,7 +1702,8 @@
 			switch (result) {
 				case "success":
 					document.getElementById("changePswd").innerHTML = (
-						`<h3>Password set!</h3>`
+						`<h3>Password set!</h3>` +
+						`<button onclick="location.reload()>Return to Main Menu</button>"`
 					);
 				break;
 
@@ -1718,6 +1725,55 @@
 					ChangePassword();
 					document.getElementById("changePswd").getElementsByTagName("button")[0].insertAdjacentHTML("beforebegin",
 						`<p style="color: red;">An unknown error occurred!  Try again later.</p>`
+					);
+				break;
+			}
+		}
+
+		function ForgotPassword() {
+			document.getElementById("login").style.visibility = 'hidden';
+
+			loadOldElementState("forgotPassword");
+			document.getElementById("forgotPassword").style.visibility = 'visible';
+		}
+
+		async function FinishForgotPassword() {
+			const email = document.getElementById("forgotPassword").getElementsByTagName("input")[0].value;
+			const which = "reset";
+
+			var result;
+			await fetch("/", {
+				method: "POST",
+				headers: {
+					Authorization: 'Bearer abcdxyz',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({which, email,}),
+			})
+				.then((response) => response.text())
+				.then((res) => result = res);
+
+			switch (result) {
+				case "doesn't exist":
+					Signup();
+					document.getElementById("forgotPassword").getElementsByTagName("button")[0].insertAdjacentHTML("beforebegin",
+						`<p style="color: red;">There is no account with that email!</p>`
+					);
+				break;
+				
+				case "success":
+					document.getElementById("forgotPassword").innerHTML = (
+						`<h3>Password ${which} email sent to ${email}!</h3>` +
+						`<h5>Be sure to check your junk/spam if you don't see the email.</h5>` +
+						`<h5>The password will expire in one hour.</h5>` +
+						`<button onclick="location.reload()>Return to Main Menu</button>"`
+					);
+				break;
+
+				default:
+					Signup();
+					document.getElementById("forgotPassword").getElementsByTagName("button").insertAdjacentHTML("beforebegin",
+						`<p style="color: red;">An unknown error occurred.  Try again later.</p>`
 					);
 				break;
 			}
@@ -1916,7 +1972,9 @@
 		<input type="email">
 		<h1>Password:</h1>
 		<input type="password">
-		<button onclick="FinishLogin();">Log In</button>
+		<button onclick="FinishLogin()">Log In</button>
+		
+		<button onclick="ForgotPassword()">Forgot Password</button>
 		
 		<script> saveElementState("login"); </script>
 	</div>
@@ -1924,7 +1982,7 @@
 	<div id="signup" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
 		<h1>Email:</h1>
 		<input type="email">
-		<button onclick="FinishSignup();">Sign Up</button>
+		<button onclick="FinishSignup()">Sign Up</button>
 		
 		<script> saveElementState("signup"); </script>
 	</div>
@@ -1939,6 +1997,14 @@
 		<button onclick="FinishChangePassword();">Submit</button>
 		
 		<script> saveElementState("changePswd"); </script>
+	</div>
+
+	<div id="forgotPassword" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+		<h1>Email:</h1>
+		<input type="email">
+		<button onclick="FinishForgotPassword()">Send Password Reset Email</button>
+
+		<script> saveElementState("forgotPassword"); </script>
 	</div>
 	
 </body>
