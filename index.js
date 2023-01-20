@@ -11,7 +11,7 @@ function getFuncName() {
 }
 
 function randomKey() {
-	console.log(getFuncName());
+	console.log(`  ${getFuncName()}`);
 	
 	var out = "";
 	for (let i = 0; i < 16; i++)
@@ -20,7 +20,7 @@ function randomKey() {
 }
 
 function rmkey(keyHashList, keyHash) {
-	console.log(getFuncName());
+	console.log(`  ${getFuncName()}`);
 	
 	var out = "";
 	for (let i = 0; i < keyHashList.length; i++)
@@ -29,7 +29,7 @@ function rmkey(keyHashList, keyHash) {
 }
 
 function checkAuth(email, hash) {
-	console.log(getFuncName());
+	console.log(`  ${getFuncName()}`);
 	
 	var pswdFileHash = read(`${email}_password.hash`);
 	if (pswdFileHash == hash) { return true; }
@@ -45,14 +45,14 @@ function checkAuth(email, hash) {
 }
 
 function sha256(toHash) {
-	console.log(getFuncName());
+	console.log(`  ${getFuncName()}`);
 	return crypto.createHash('sha256').update(toHash).digest('hex');
 }
 
 
 // Login
 function login(email, pswd) {
-	console.log(getFuncName());
+	console.log(`${getFuncName()}`);
 	
 	// if(file_exists("${email}_password.hash")) {
 	if (fs.existsSync(`${email}_password.hash`)) {
@@ -91,7 +91,7 @@ function login(email, pswd) {
 
 // Logout
 function logout(email, key) {
-	console.log(getFuncName());
+	console.log(`${getFuncName()}`);
 	
 	// if(file_exists("${email}_password.hash")) {
 	if (fs.existsSync(`${email}_password.hash`)) {
@@ -125,7 +125,7 @@ function logout(email, key) {
 
 // Save
 function save(email, key, data) {
-	console.log(getFuncName());
+	console.log(`${getFuncName()}`);
 	
 	// $auth = false;
 	var auth = false;
@@ -203,7 +203,7 @@ function save(email, key, data) {
 
 // Load
 function load(email) {
-	console.log(getFuncName());
+	console.log(`${getFuncName()}`);
 
 	if (fs.existsSync(`${email}_data.json`)) {
 		return read(`${email}_data.json`);
@@ -214,7 +214,7 @@ function load(email) {
 
 // Validate
 function validate(email, key) {
-	console.log(getFuncName());
+	console.log(`${getFuncName()}`);
 	
 	// $auth = false;
 	var auth = false;
@@ -268,7 +268,7 @@ function validate(email, key) {
 					err => { if (err) console.error(err); }
 				);
 						
-	// 			break;
+				break;
 			}
 		}
 	// 	if($auth) { echo $newKey; }
@@ -283,7 +283,7 @@ function validate(email, key) {
 
 // Change Password
 function changePswd(email, oldPswd, newPswd) {
-	console.log(getFuncName());
+	console.log(`${getFuncName()}`);
 	
 	if (fs.existsSync(`${email}_password.hash`)) {
 		var oldPswdHash = sha256(oldPswd);
@@ -327,13 +327,13 @@ var transporter = nodemailer.createTransport({
 });
 
 function randomPassword() {
-	console.log(getFuncName());
+	console.log(`  ${getFuncName()}`);
 	
 	return randomKey() + randomKey();
 }
 
 function pswdEmail(email, which) {
-	console.log(getFuncName());
+	console.log(`${getFuncName()}`);
 	
 	var pswd = randomPassword();
 	
@@ -394,7 +394,7 @@ function pswdEmail(email, which) {
 
 // Main handler function
 async function POST(req, res) {
-	console.log(getFuncName());
+	console.log(`\n${getFuncName()}`);
 	
 	const which = req.body.which;
 	switch (which) {

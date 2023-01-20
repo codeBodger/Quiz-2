@@ -1,4 +1,4 @@
-Version v2.0.0-alpha 2023-01-20 13:19:38 UTC
+Version v2.0.0-alpha 2023-01-20 13:58:54 UTC
 
 # Using the site
 - To use the site, simply click [here](https://quiz-2.rowanackerman.repl.co/).
