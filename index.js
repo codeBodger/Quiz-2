@@ -24,7 +24,8 @@ function rmkey(keyHashList, keyHash) {
 	
 	var out = "";
 	for (let i = 0; i < keyHashList.length; i++)
-		if (keyHashList[i] != keyHash) out = out + "\n" + keyHashList[i];
+		if ((keyHashList[i] || keyHash) != keyHash)
+			out = out + (out && "\n") + keyHashList[i];
 	return out;
 }
 
@@ -248,8 +249,11 @@ function validate(email, key) {
 	// 			fclose($keyHashFile);
 				keyFileHashList = read(`${email}_keys.hash`).split("\n");
 						
+	// 			$newKeyHash = hash("sha256", $newKey);
+				var newKeyHash = sha256(newKey);
+	// 			fwrite($keyHashFile, "$newKeyHash");
 	// 			unset($keyFileHashList[array_search($keyHash, $keyFileHashList)]);
-				var keyFileHashListStr = rmkey(keyFileHashList, keyHash);
+				var keyFileHashListStr = rmkey(keyFileHashList.concat(newKeyHash), keyHash);
 				
 	// 			$keyHashFile = fopen("${email}_keys.hash", "w") or die("Unable to open file!");
 	// 			fwrite($keyHashFile, "");
@@ -261,10 +265,6 @@ function validate(email, key) {
 	// 				fwrite($keyHashFile, "$keyFileHash templock\n");
 	// 			}
 	
-	// 			$newKeyHash = hash("sha256", $newKey);
-				var newKeyHash = sha256(newKey);
-	// 			fwrite($keyHashFile, "$newKeyHash");
-				keyFileHashListStr = keyFileHashListStr + "\n" + newKeyHash;
 	// 			fclose($keyHashFile);
 				fs.writeFile(
 					`${email}_keys.hash`,
