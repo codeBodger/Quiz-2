@@ -49,6 +49,10 @@ function sha256(toHash) {
 	return crypto.createHash('sha256').update(toHash).digest('hex');
 }
 
+function validateEmail(email) {
+	return email.search(/.\@.+\../) != -1;
+}
+
 
 // Login
 function login(email, pswd) {
@@ -395,6 +399,11 @@ function pswdEmail(email, which) {
 // Main handler function
 async function POST(req, res) {
 	console.log(`\n${getFuncName()}`);
+
+	if (!validateEmail(req.body.email)) {
+		res.send("Deine E-mail ist schlechte.");
+		return;
+	}
 	
 	const which = req.body.which;
 	switch (which) {
